@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <sys/wait.h>
 #include <sys/utsname.h>
 
 #include <passwd.h>
@@ -44,5 +45,21 @@ int main(void) {
         } else {
             break;
         }
+    }
+
+    // Fork to execute the login shell.
+    pid_t pid = fork();
+    int status;
+
+    if (!pid) {
+        // Set the UID in the forked thread.
+        uid_t uid = passwd_getuid(user);
+        setuid(uid);
+
+        // Launch!
+        char *args[] = {passwd_getshell(user), NULL};
+        execvp(passwd_getshell(user), args);
+    } else {
+        waitpid(pid, &status, 0);
     }
 }

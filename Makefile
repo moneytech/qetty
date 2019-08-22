@@ -4,7 +4,7 @@ SOURCE := $(shell find . -type f -name '*.c')
 OBJ    := $(SOURCE:.c=.o)
 
 # User options.
-PREFIX  = /usr/bin
+PREFIX  = /sbin
 DESTDIR =
 
 CC = gcc

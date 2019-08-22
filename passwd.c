@@ -28,11 +28,6 @@ int test_passwd(char *user, char *pw) {
     sha256_update(&ctx, pw, strlen(pw));
     sha256_final(&ctx, password);
 
-    for (int x = 0; x < SHA256_BLOCK_SIZE; x++)
-        printf("%02x", password[x]);
-    
-    printf("\n");
-
     // Open file for testing.
     FILE *fp = fopen("/etc/passwd", "r");
 
@@ -52,4 +47,42 @@ int test_passwd(char *user, char *pw) {
 
     fclose(fp);
     return -1;
+}
+
+char *passwd_getshell(char *user) {
+    FILE *fp = fopen("/etc/passwd", "r");
+
+    while (!feof(fp)) {
+        // Get fields.
+        fscanf(fp, "%s:%s:%u:%u:%s:%s:%s", passwd_user, passwd_hash,
+            &passwd_uid, &passwd_gid, passwd_fulluser, passwd_homedir,
+            passwd_shell);
+
+        // Check the user, if its correct, check password.
+        if (!strcmp(user, passwd_user)) {
+            return passwd_shell;
+        } 
+    }
+
+    fclose(fp);
+    return NULL;
+}
+
+uid_t passwd_getuid(char *user) {
+    FILE *fp = fopen("/etc/passwd", "r");
+
+    while (!feof(fp)) {
+        // Get fields.
+        fscanf(fp, "%s:%s:%u:%u:%s:%s:%s", passwd_user, passwd_hash,
+            &passwd_uid, &passwd_gid, passwd_fulluser, passwd_homedir,
+            passwd_shell);
+
+        // Check the user, if its correct, check password.
+        if (!strcmp(user, passwd_user)) {
+            return passwd_uid;
+        } 
+    }
+
+    fclose(fp);
+    return 0;
 }
