@@ -19,10 +19,12 @@ char hostname[MAX_HOSTNAME_LEN];
 
 void set_global_data(void) {
     printf("%s login: ", hostname);
+    fflush(stdout);
     fgets(user, MAX_USER_LEN, stdin);
     user[strlen(user) - 1] = '\0';
 
     printf("Password: ");
+    fflush(stdout);
     fgets(password, MAX_PASSWORD_LEN, stdin);
     password[strlen(password) - 1] = '\0';
 }
