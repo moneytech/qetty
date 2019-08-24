@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <termios.h>
 #include <sys/wait.h>
 #include <sys/utsname.h>
 
@@ -18,14 +19,30 @@ char password[MAX_PASSWORD_LEN];
 char hostname[MAX_HOSTNAME_LEN];
 
 void set_global_data(void) {
+    // Ask for login name.
     printf("%s login: ", hostname);
     fflush(stdout);
     fgets(user, MAX_USER_LEN, stdin);
     user[strlen(user) - 1] = '\0';
 
+    // Ask for password.
     printf("Password: ");
     fflush(stdout);
+
+    // Turn off echo and etc.
+    struct termios orig;
+    tcgetattr(STDIN_FILENO, &orig);
+    struct termios new = orig;
+    new.c_lflag &= ~ECHO;
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &new);
+
     fgets(password, MAX_PASSWORD_LEN, stdin);
+
+    // Reset terminal properties.
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig);
+
+    putchar('\n');
+
     password[strlen(password) - 1] = '\0';
 }
 
