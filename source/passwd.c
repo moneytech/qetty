@@ -11,7 +11,6 @@
 #define MAX_LINE_LEN       2048
 #define MAX_USERS          256
 #define MAX_USER_LEN       256
-#define MAX_PASSWDHASH_LEN 1024
 #define MAX_SHELL_LEN      256
 #define MAX_FULLUSER_LEN   1024
 #define MAX_HOMEDIR_LEN    1024
@@ -21,7 +20,7 @@ size_t passwd_users;
 char   passwd_line[MAX_LINE_LEN];
 
 char   passwd_user[MAX_USER_LEN][MAX_USERS];
-char   passwd_hash[MAX_PASSWDHASH_LEN][MAX_USERS];
+char   passwd_hash[SHA256_BLOCK_SIZE + 1][MAX_USERS];
 uid_t  passwd_uid[MAX_USERS];
 gid_t  passwd_gid[MAX_USERS];
 char   passwd_fulluser[MAX_FULLUSER_LEN][MAX_USERS];
@@ -69,15 +68,14 @@ int test_passwd(char *usr, char *pw) {
             sha256_update(&ctx, pw, strlen(pw));
             sha256_final(&ctx, password);
 
-            for(size_t x = 0; x < SHA256_BLOCK_SIZE; x++)
-                printf("%02x", password[x]);
-            
+            for (size_t x = 0; x < SHA256_BLOCK_SIZE; x++)
+                printf("%02x", password[i]);
             putchar('\n');
 
             printf("%s\n", passwd_hash[i]);
 
             // Compare the password hashes.
-            if (!memcmp(password, passwd_hash[i], SHA256_BLOCK_SIZE))
+            if (!strncmp(password, passwd_hash[i], SHA256_BLOCK_SIZE))
                 return 0;
             else
                 return 1;
