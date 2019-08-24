@@ -12,7 +12,7 @@ CC = gcc
 CFLAGS  = -O2 -pipe -Wall -Wextra
 LDFLAGS = -O2
 
-CHARDFLAGS  := $(CFLAGS) -masm=intel -I.
+CHARDFLAGS  := $(CFLAGS) -masm=intel -Isource
 LDHARDFLAGS := $(LDFLAGS)
 
 .PHONY: all clean install

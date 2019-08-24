@@ -37,6 +37,9 @@ int main(void) {
     printf("%s (%s) (%s)\n\n", buffer.sysname, hostname,
         basename(ttyname(STDIN_FILENO)));
 
+    // Prepare the info we need.
+    parse_passwd();
+
     while (1) {
         // Get command line user and password.
         set_global_data();
