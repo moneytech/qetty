@@ -74,8 +74,7 @@ int test_passwd(char *usr, char *pw) {
             
             putchar('\n');
 
-            for(size_t x = 0; x < SHA256_BLOCK_SIZE; x++)
-                printf("%02x", passwd_hash[x]);
+            printf("%02x", passwd_hash[i]);
             
             putchar('\n');
 
