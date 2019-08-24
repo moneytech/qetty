@@ -37,10 +37,6 @@ void parse_passwd(void) {
         // TODO: Check for the availability of the fields instead of harcode.
         split(passwd_line, ':', &tokens);
 
-        // TODO: Check for the availability of the fields instead of harcode.
-        // First remove the last char in tokens[6], which is a newline.
-        tokens[6][strlen(tokens[6]) - 2] = '\0';
-
         strcpy(passwd_user[passwd_users], tokens[0]);
         strcpy(passwd_hash[passwd_users], tokens[1]);
         passwd_uid[passwd_users] = atoi(tokens[2]);

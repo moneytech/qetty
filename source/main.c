@@ -79,8 +79,9 @@ int main(void) {
         setuid(uid);
 
         // Launch!
-        char *args[] = {passwd_getshell(user), NULL};
-        execvp(passwd_getshell(user), args);
+        char *shell = passwd_getshell(user);
+        char *args[] = {shell, NULL};
+        execvp(shell, args);
     } else {
         waitpid(pid, &status, 0);
     }
