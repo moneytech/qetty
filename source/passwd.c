@@ -74,9 +74,7 @@ int test_passwd(char *usr, char *pw) {
             
             putchar('\n');
 
-            printf("%02x", passwd_hash[i]);
-            
-            putchar('\n');
+            printf("%s\n", passwd_hash[i]);
 
             // Compare the password hashes.
             if (!memcmp(password, passwd_hash[i], SHA256_BLOCK_SIZE))
