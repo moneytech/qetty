@@ -69,6 +69,16 @@ int test_passwd(char *usr, char *pw) {
             sha256_update(&ctx, pw, strlen(pw));
             sha256_final(&ctx, password);
 
+            for(size_t x = 0; x < SHA256_BLOCK_SIZE; x++)
+                printf("%02x", password[x]);
+            
+            putchar('\n');
+
+            for(size_t x = 0; x < SHA256_BLOCK_SIZE; x++)
+                printf("%02x", passwd_hash[x]);
+            
+            putchar('\n');
+
             // Compare the password hashes.
             if (!memcmp(password, passwd_hash[i], SHA256_BLOCK_SIZE))
                 return 0;
